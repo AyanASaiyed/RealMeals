@@ -3,33 +3,33 @@ import bcrypt from "bcryptjs";
 import generateTokenAndSetCookie from "../token/generateTokenAndSetCookie.js";
 
 export const login = async (req, res) => {
-    try {
-      const { username, password } = req.body;
-      const user = await User.findOne({ username });
-  
-      if (!user) {
-        return res
-          .status(400)
-          .json({ error: "No user with listed username located." });
-      }
-  
-      const userPass = user.password;
-  
-      const comparePass = await bcrypt.compare(password, userPass);
-  
-      if (!comparePass) {
-        return res.status(400).json({ error: "Invalid Password" });
-      }
-  
-      generateTokenAndSetCookie(user._id, res);
-      return res.status(200).json({
-        _id: user._id,
-        username: user.username,
-      });
-    } catch (error) {
-      console.log("Error Logging in User: " + error.message);
+  try {
+    const { username, password } = req.body;
+    const user = await User.findOne({ username });
+
+    if (!user) {
+      return res
+        .status(400)
+        .json({ error: "No user with listed username located." });
     }
-  };
+
+    const userPass = user.password;
+
+    const comparePass = await bcrypt.compare(password, userPass);
+
+    if (!comparePass) {
+      return res.status(400).json({ error: "Invalid Password" });
+    }
+
+    generateTokenAndSetCookie(user._id, res);
+    return res.status(200).json({
+      _id: user._id,
+      username: user.username,
+    });
+  } catch (error) {
+    console.log("Error Logging in User: " + error.message);
+  }
+};
 
 export const register = async (req, res) => {
   const { username, password, confirmPassword } = req.body;
@@ -37,12 +37,6 @@ export const register = async (req, res) => {
   try {
     if (password !== confirmPassword) {
       return res.status(400).json({ message: "Passwords don't match" });
-    }
-
-    if (password.length < 6) {
-      return res
-        .status(400)
-        .json({ message: "Password must be atleast 6 characters long" });
     }
 
     const user = await User.findOne({ username });

@@ -5,6 +5,7 @@ import postRoutes from "./routes/post.routes.js";
 import userRoutes from "./routes/user.routes.js";
 import connectToMongoDB from "./database/connectToMongoDB.js";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 const app = express();
 
@@ -12,6 +13,7 @@ const PORT = process.env.PORT;
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/posts", postRoutes);
