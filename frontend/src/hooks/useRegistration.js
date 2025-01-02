@@ -1,8 +1,8 @@
 import toast from "react-hot-toast";
-import { authContext } from "../context/authContext";
+import { useAuthContext } from "../context/authContext";
 
 const useRegistration = () => {
-  const { setAuthUser } = authContext();
+  const { setAuthUser } = useAuthContext();
   const register = async ({ username, password, confirmPassword }) => {
     const valid = validCredentials(username, password, confirmPassword);
 
@@ -21,7 +21,7 @@ const useRegistration = () => {
 
       const data = await res.json();
 
-      localStorage.setItem("user-info", data);
+      localStorage.setItem("user-info-1", data);
 
       setAuthUser(data);
       console.log("Account Successfully Registered.", {

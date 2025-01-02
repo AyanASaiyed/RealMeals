@@ -1,8 +1,8 @@
 import toast from "react-hot-toast";
-import { authContext } from "../context/authContext";
+import { useAuthContext } from "../context/authContext";
 
 const useLogging = () => {
-  const { setAuthUser } = authContext();
+  const { setAuthUser } = useAuthContext();
   const login = async (username, password) => {
     try {
       const res = await fetch("http://localhost:3000/api/auth/login", {
@@ -18,7 +18,7 @@ const useLogging = () => {
 
       const data = await res.json();
 
-      localStorage.setItem("user-info", JSON.stringify(data));
+      localStorage.setItem("user-info-1", JSON.stringify(data));
       setAuthUser(data);
       toast.success("Successful Login");
       console.log("successfull login.", {

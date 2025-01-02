@@ -4,10 +4,14 @@ import Register from "../pages/Register/Register";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Home from "../pages/Home/Home";
 import { Toaster } from "react-hot-toast";
-import { authContext } from "./context/authContext.jsx";
+import { useAuthContext } from "./context/authContext.jsx";
 
 const App = () => {
-  const { authUser } = authContext();
+  const context = useAuthContext();
+  console.log("Full context in App:", context); // Add this
+  const { authUser } = context;
+  console.log("authUser value in App:", authUser);
+
   return (
     <div>
       <Toaster />
