@@ -8,9 +8,7 @@ import { useAuthContext } from "./context/authContext.jsx";
 
 const App = () => {
   const context = useAuthContext();
-  console.log("Full context in App:", context); // Add this
   const { authUser } = context;
-  console.log("authUser value in App:", authUser);
 
   return (
     <div>

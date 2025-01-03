@@ -2,7 +2,6 @@ import { createContext, useContext, useState } from "react";
 
 export const AuthContext = createContext();
 
-// The issue is in this function - it's returning the window object
 export const useAuthContext = () => {
   const context = useContext(AuthContext);
   console.log("Context value:", context);
