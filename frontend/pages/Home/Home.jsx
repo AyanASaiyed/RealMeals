@@ -1,4 +1,5 @@
 import { useAuthContext } from "../../src/context/authContext";
+import useCreatePost from "../../src/hooks/useCreatePost";
 import useLogout from "../../src/hooks/useLogout";
 import Posts from "./Posts";
 import { useState } from "react";
@@ -7,9 +8,39 @@ const Home = () => {
   const { authUser } = useAuthContext();
   const username = authUser.username;
 
-  const [image, setImage] = useState(null);
+  const createPost = useCreatePost();
+
+  const [Image, setImage] = useState(null);
 
   const logout = useLogout();
+
+  const uploadImage = async (e) => {
+    const file = e.target.files[0];
+    const base64 = await convertToBase64(file);
+    setImage(base64);
+    console.log(base64);
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+    console.log("Token:", token);
+    await createPost(base64);
+  };
+
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
+
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+
+      fileReader.onerror = (error) => {
+        reject(error);
+      };
+    });
+  };
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -36,7 +67,7 @@ const Home = () => {
           </button>
         </div>
         <div>
-          <Posts />
+          <Posts img={Image} />
         </div>
         <div>
           <input
@@ -44,6 +75,9 @@ const Home = () => {
             id="fileInput"
             accept="image/*"
             className="hidden"
+            onChange={(e) => {
+              uploadImage(e);
+            }}
           />
           <button
             onClick={handleFileInput}

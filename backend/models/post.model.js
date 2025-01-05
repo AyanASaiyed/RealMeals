@@ -1,14 +1,15 @@
 import mongoose, { Schema } from "mongoose";
 
+const { ObjectId } = mongoose.Schema.Types;
 const postSchema = new Schema(
   {
-    username: {
-      type: String,
-      required: true,
-    },
     post: {
       type: String,
-      required: true,
+      default: "no photo",
+    },
+    poster: {
+      type: ObjectId,
+      ref: "User",
     },
   },
   { timestamps: true }

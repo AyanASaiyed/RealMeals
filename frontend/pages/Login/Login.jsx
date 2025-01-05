@@ -12,6 +12,11 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     await login(username, password);
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("token="))
+      ?.split("=")[1];
+    console.log("Token:", token);
   };
 
   return (
