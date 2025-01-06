@@ -1,5 +1,5 @@
+import axios from "axios";
 import { useAuthContext } from "../../src/context/authContext";
-import useCreatePost from "../../src/hooks/useCreatePost";
 import useLogout from "../../src/hooks/useLogout";
 import Posts from "./Posts";
 import { useState } from "react";
@@ -8,33 +8,39 @@ const Home = () => {
   const { authUser } = useAuthContext();
   const username = authUser.username;
 
-  const createPost = useCreatePost();
-
   const [Image, setImage] = useState(null);
 
   const logout = useLogout();
 
   const uploadImage = async (e) => {
+    e.preventDefault();
     const file = e.target.files[0];
-    const base64 = await convertToBase64(file);
-    setImage(base64);
-    console.log(base64);
-    await createPost(base64);
-  };
+    if (!file) {
+      console.log("No file selected");
+      return;
+    }
 
-  const convertToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(file);
+    const formData = new FormData();
+    formData.append("post", file); // Directly use the file here
 
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      };
+    const token = localStorage.getItem("user-info-1");
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/api/posts/create",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+            credentials: "include",
+          },
+        }
+      );
 
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
-    });
+      console.log("Image Uploaded Successfully: ", res.data);
+    } catch (error) {
+      console.log("Error uploading image on AXIOS: ", error.message);
+    }
   };
 
   const handleLogout = async (e) => {

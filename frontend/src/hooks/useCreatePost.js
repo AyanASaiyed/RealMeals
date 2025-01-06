@@ -1,12 +1,9 @@
+import axios from "axios";
+
 const useCreatePost = () => {
-  const createPost = async ({ base64url }) => {
+  const createPost = async (base64url) => {
     try {
-      const res = await fetch("http://localhost:3000/api/posts/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ base64url }),
-        credentials: "include",
-      });
+      const res = await axios.post("http://localhost:3000/api/posts/create")
 
       if (!res.ok) {
         console.log("Error Fetching createPost API");
