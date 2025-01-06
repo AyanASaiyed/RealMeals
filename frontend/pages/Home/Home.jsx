@@ -19,11 +19,6 @@ const Home = () => {
     const base64 = await convertToBase64(file);
     setImage(base64);
     console.log(base64);
-    const token = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("token="))
-      ?.split("=")[1];
-    console.log("Token:", token);
     await createPost(base64);
   };
 

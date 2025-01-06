@@ -3,6 +3,8 @@ import User from "../models/user.model.js";
 
 const protectedRoute = async (req, res, next) => {
   try {
+    console.log("Req Cookies: ", req.cookies);
+    console.log("Req Headers: ", req.headers);
     const token = req.cookies.jwt01;
 
     if (!token) {
@@ -23,10 +25,10 @@ const protectedRoute = async (req, res, next) => {
       return res.status(401).json({ error: "user not found" });
     }
 
+    console.log("Token: ", token);
     req.user = user;
 
     next();
-
   } catch (error) {
     console.log("error in protectRoute middleware: ", error.message);
     res.status(500).json({ error: "Internal Sever Error in middleware" });

@@ -21,7 +21,7 @@ export const login = async (req, res) => {
       return res.status(400).json({ error: "Invalid Password" });
     }
 
-    generateTokenAndSetCookie(user._id, res);
+    generateTokenAndSetCookie(user._id.toString(), res);
     return res.status(200).json({
       _id: user._id,
       username: user.username,
@@ -54,7 +54,7 @@ export const register = async (req, res) => {
     });
 
     if (newUser) {
-      generateTokenAndSetCookie(newUser._id, res);
+      generateTokenAndSetCookie(newUser._id.toString(), res);
       await newUser.save();
 
       res.status(201).json({

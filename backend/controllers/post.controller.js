@@ -21,7 +21,7 @@ export const createPost = async (req, res) => {
     });
 
     post.save();
-
+    console.log("Saving in db");
     return res.status(200).json({ post });
   } catch (error) {
     console.log("Error in createPost API: ", error.message);
