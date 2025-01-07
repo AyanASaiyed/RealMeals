@@ -6,6 +6,7 @@ import userRoutes from "./routes/user.routes.js";
 import connectToMongoDB from "./database/connectToMongoDB.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import multer from "multer";
 
 const app = express();
 
@@ -23,6 +24,15 @@ app.use(
 app.use("/api/auth", authRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/users", userRoutes);
+
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    res.status(500).json({ error: err.message });
+  } else if (err) {
+    res.status(500).json({ error: err.message });
+  }
+  next();
+});
 
 app.listen(PORT, () => {
   connectToMongoDB();

@@ -5,25 +5,28 @@ export const getPosts = async (req, res) => {
   res.send("Get Post Route");
 };
 
-export const createPost = async (req, res) => {
-  const { base64url } = req.body;
+// export const createPost = async (req, res) => {
+//   const imageName = req.file.filename;
 
-  try {
-    const user = await User.findById(req.user._id);
+//   try {
+//     const user = await User.findById(req.user._id);
 
-    if (!user) {
-      return res.status(400).json({ error: "User Not Found" });
-    }
+//     if (!user) {
+//       return res.status(400).json({ error: "User not Found" });
+//     }
 
-    const post = new Post({
-      post: base64url,
-      poster: req.user,
-    });
+//     const post = new Post({
+//       post: imageName,
+//     });
 
-    post.save();
-    console.log("Saving in db");
-    return res.status(200).json({ post });
-  } catch (error) {
-    console.log("Error in createPost API: ", error.message);
-  }
-};
+//     post.save();
+
+//     console.log("Image Saved in DB");
+
+//     return res.status(200).json("ok");
+//   } catch (error) {
+//     return res
+//       .status(500)
+//       .json({ error: "Internal Server Error on createPost" });
+//   }
+// };

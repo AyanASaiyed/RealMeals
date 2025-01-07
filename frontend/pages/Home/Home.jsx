@@ -8,22 +8,24 @@ const Home = () => {
   const { authUser } = useAuthContext();
   const username = authUser.username;
 
-  const [Image, setImage] = useState(null);
+  const [Image, setImage] = useState();
 
   const logout = useLogout();
 
-  const uploadImage = async (e) => {
+  const uploadImage = (e) => {
+    console.log(e.target.files[0]);
+    setImage(e.target.files[0]);
+  };
+
+  const submit = async (e) => {
     e.preventDefault();
-    const file = e.target.files[0];
-    if (!file) {
-      console.log("No file selected");
+    const formData = new FormData();
+    if (!Image) {
+      console.log("No file set");
       return;
     }
+    formData.append("post", Image);
 
-    const formData = new FormData();
-    formData.append("post", file); // Directly use the file here
-
-    const token = localStorage.getItem("user-info-1");
     try {
       const res = await axios.post(
         "http://localhost:3000/api/posts/create",
@@ -31,9 +33,8 @@ const Home = () => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-            credentials: "include",
           },
+          withCredentials: true,
         }
       );
 
@@ -46,10 +47,6 @@ const Home = () => {
   const handleLogout = async (e) => {
     e.preventDefault();
     await logout();
-  };
-
-  const handleFileInput = () => {
-    document.getElementById("fileInput").click();
   };
 
   return (
@@ -67,25 +64,14 @@ const Home = () => {
             Logout
           </button>
         </div>
+        <div>{Image ? <Posts img={Image} /> : ""}</div>
         <div>
-          <Posts img={Image} />
-        </div>
-        <div>
-          <input
-            type="file"
-            id="fileInput"
-            accept="image/*"
-            className="hidden"
-            onChange={(e) => {
-              uploadImage(e);
-            }}
-          />
-          <button
-            onClick={handleFileInput}
-            className="absolute bottom-5 left-1/2 transform -translate-x-1/2 h-[7vh] w-[8vw] bg-green-800 hover:bg-green-900 text-white rounded-3xl"
-          >
-            Upload Image
-          </button>
+          <form onSubmit={submit}>
+            <input type="file" accept="image/*" onChange={uploadImage} />
+            <button className=" h-[5vh] w-[7vw] bg-green-900 rounded-2xl">
+              Upload
+            </button>
+          </form>
         </div>
       </div>
     </div>

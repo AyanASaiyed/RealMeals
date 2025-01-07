@@ -12,6 +12,8 @@ dist
 dist-ssr
 *.local
 
+user-posts
+
 .env
 
 # Editor directories and files
