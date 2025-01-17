@@ -1,5 +1,4 @@
 import express from "express";
-import { getPosts } from "../controllers/post.controller.js";
 import Post from "../models/post.model.js";
 import User from "../models/user.model.js";
 import protectedRoute from "../middleware/protectedRoute.js";
@@ -25,21 +24,17 @@ const upload = multer({ storage: storage });
 
 const router = express.Router();
 
-router.get("/get", protectedRoute, async (req, res) => {
+router.get("/get", async (req, res) => {
   try {
-    const post = Post.find({}).then((data) => {
-      return res.status(200).json({
-        data: data,
-      });
-    });
+    const post = await Post.find({});
 
-    return res.status(200).json({
-      post,
-    });
+    return res.status(200).json({ data: post });
   } catch (error) {
+    console.log("Error in getPost API route: ", error.message);
     return res.status(500).json({ error: "Internal Server Error on GetPost" });
   }
 });
+
 router.post(
   "/create",
   protectedRoute,

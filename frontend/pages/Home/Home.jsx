@@ -9,7 +9,7 @@ const Home = () => {
   const username = authUser.username;
 
   const [Image, setImage] = useState();
-  const [Posts, setPosts] = useState();
+  const [Post, setPost] = useState([]);
 
   const logout = useLogout();
 
@@ -51,7 +51,7 @@ const Home = () => {
 
   const getPosts = async () => {
     const res = await axios.get("http://localhost:3000/api/posts/get");
-    setPosts(res);
+    setPost(res.data.data || []);
     console.log(res);
   };
 
@@ -76,9 +76,6 @@ const Home = () => {
           </button>
         </div>
         <div>{Image ? <Posts img={Image} /> : ""}</div>
-        {Posts.map((data) => {
-          return <img src={data} />;
-        })}
         <div>
           <form onSubmit={submit}>
             <input type="file" accept="image/*" onChange={uploadImage} />
@@ -86,6 +83,9 @@ const Home = () => {
               Upload
             </button>
           </form>
+          {Post.map((data) => {
+            return <img src={data.Image} height={100} width={100}/>;
+          })}
         </div>
       </div>
     </div>
