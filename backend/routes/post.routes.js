@@ -25,19 +25,18 @@ const upload = multer({ storage: storage });
 
 const router = express.Router();
 
-router.get("/get", getPosts);
+router.get("/get", async (req, res) => {
+  
+});
 router.post(
   "/create",
   protectedRoute,
   upload.single("post"),
   async (req, res) => {
-    console.log("Here");
     const imageName = req.file.filename;
 
     try {
       const user = await User.findById(req.user._id);
-      console.log("Here2");
-
       if (!user) {
         return res.status(400).json({ error: "User not Found" });
       }
