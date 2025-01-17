@@ -2,15 +2,20 @@ import axios from "axios";
 import { useAuthContext } from "../../src/context/authContext";
 import useLogout from "../../src/hooks/useLogout";
 import Posts from "./Posts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Home = () => {
   const { authUser } = useAuthContext();
   const username = authUser.username;
 
   const [Image, setImage] = useState();
+  const [Posts, setPosts] = useState();
 
   const logout = useLogout();
+
+  useEffect(() => {
+    getPosts();
+  }, []);
 
   const uploadImage = (e) => {
     console.log(e.target.files[0]);
@@ -44,6 +49,12 @@ const Home = () => {
     }
   };
 
+  const getPosts = async () => {
+    const res = await axios.get("http://localhost:3000/api/posts/get");
+    setPosts(res);
+    console.log(res);
+  };
+
   const handleLogout = async (e) => {
     e.preventDefault();
     await logout();
@@ -65,6 +76,9 @@ const Home = () => {
           </button>
         </div>
         <div>{Image ? <Posts img={Image} /> : ""}</div>
+        {Posts.map((data) => {
+          return <img src={data} />;
+        })}
         <div>
           <form onSubmit={submit}>
             <input type="file" accept="image/*" onChange={uploadImage} />

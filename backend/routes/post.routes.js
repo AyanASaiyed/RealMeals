@@ -25,8 +25,20 @@ const upload = multer({ storage: storage });
 
 const router = express.Router();
 
-router.get("/get", async (req, res) => {
-  
+router.get("/get", protectedRoute, async (req, res) => {
+  try {
+    const post = Post.find({}).then((data) => {
+      return res.status(200).json({
+        data: data,
+      });
+    });
+
+    return res.status(200).json({
+      post,
+    });
+  } catch (error) {
+    return res.status(500).json({ error: "Internal Server Error on GetPost" });
+  }
 });
 router.post(
   "/create",
