@@ -2,7 +2,7 @@ import axios from "axios";
 import { useAuthContext } from "../../src/context/authContext";
 import useLogout from "../../src/hooks/useLogout";
 import Posts from "./Posts";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const Home = () => {
   const { authUser } = useAuthContext();
@@ -64,9 +64,11 @@ const Home = () => {
     <div>
       <div className="flex flex-col items-center justify-center">
         <div className="h-[12vh] w-screen backdrop-blur-lg bg-opacity-80 flex items-center justify-center space-x-72 -mt-5 bg-white/5">
-          <h1 className="text-white font-extrabold">Welcome, {username}</h1>
-          <h1 className="text-5xl font-extralight">
-            Real<span className="text-green-500">Meals😋</span>
+          <h1 className="text-white font-extrabold text-2xl">
+            Welcome, {username}
+          </h1>
+          <h1 className="text-5xl font-extralight text-white">
+            Real<span className="text-green-500">Meals</span>
           </h1>
           <button
             className="h-[5vh] w-[5vw] bg-red-800 text-white rounded-full hover:bg-red-950"
@@ -79,12 +81,19 @@ const Home = () => {
         <div>
           <form onSubmit={submit}>
             <input type="file" accept="image/*" onChange={uploadImage} />
-            <button className=" h-[5vh] w-[7vw] bg-green-900 rounded-2xl">
+            <button className=" h-[5vh] w-[7vw] bg-green-900 rounded-2xl text-white">
               Upload
             </button>
           </form>
           {Post.map((data) => {
-            return <img src={data.Image} height={100} width={100}/>;
+            return (
+              <img
+                className="flex items-center justify-center flex-col"
+                src={`../../userPosts/${data.post}`}
+                height={100}
+                width={100}
+              />
+            );
           })}
         </div>
       </div>

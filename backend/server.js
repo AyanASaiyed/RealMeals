@@ -35,8 +35,8 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  connectToMongoDB();
   console.log(
     `Server running on PORT: ${PORT} on address: http://localhost:${PORT}`
   );
+  connectToMongoDB();
 });

@@ -8,11 +8,7 @@ import fs from "fs";
 // Configure multer storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const dir = "./user-posts";
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir);
-    }
-    cb(null, dir);
+    cb(null, "../frontend/userPosts/");
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now();
@@ -48,12 +44,16 @@ router.post(
         return res.status(400).json({ error: "User not Found" });
       }
 
-      const post = new Post({
-        post: imageName,
-        poster: req.user,
-      });
+      try {
+        const post = new Post({
+          post: imageName,
+          poster: req.user,
+        });
 
-      post.save();
+        post.save();
+      } catch (error) {
+        console.log("Error in creating post: ", error.message);
+      }
 
       console.log("Image Saved in DB");
 
